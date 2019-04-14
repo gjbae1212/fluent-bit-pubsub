@@ -1,0 +1,7 @@
+steps:
+- name: 'gcr.io/cloud-builders/go:debian'
+  entrypoint: '/bin/bash'
+  args: ['./local.sh', 'test']
+  env:
+  - 'GO111MODULE=on'
+  - 'PROJECT_ROOT=fluent-bit-pubsub'
