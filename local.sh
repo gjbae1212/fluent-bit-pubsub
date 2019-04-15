@@ -8,7 +8,12 @@ CURRENT=`pwd`
 function test
 {
    set_env
-   go test -v $(go list ./... | grep -v vendor) --count 1
+   go test -v $(go list ./... | grep -v vendor) --count 1 -race -coverprofile=$CURRENT/coverage.txt -covermode=atomic
+}
+
+function codecov
+{
+   /bin/bash <(curl -s https://codecov.io/bash)
 }
 
 function set_env
