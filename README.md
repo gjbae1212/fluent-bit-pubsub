@@ -1,9 +1,10 @@
 # fluent-bit output plugin for google pubsub
 
 <p align="left">  
-  <img src="https://img.shields.io/badge/google--cloudbuild-passing-brightgreen.svg" alt="Google Cloud build"/>
+  <a href="https://circleci.com/gh/gjbae1212/fluent-bit-pubsub/tree/master"><img src="https://circleci.com/gh/gjbae1212/fluent-bit-pubsub/tree/master.svg?style=svg"/></a>
   <a href="/LICENSE"><img src="https://img.shields.io/badge/license-MIT-GREEN.svg" alt="license" /></a>
-  <a href="https://goreportcard.com/report/github.com/gjbae1212/fluent-bit-pubsub"><img src="https://goreportcard.com/badge/github.com/gjbae1212/fluent-bit-pubsub" alt="Go Report Card" /></a>        
+  <a href="https://goreportcard.com/report/github.com/gjbae1212/fluent-bit-pubsub"><img src="https://goreportcard.com/badge/github.com/gjbae1212/fluent-bit-pubsub" alt="Go Report Card" /></a>
+  <a href="https://codecov.io/gh/gjbae1212/fluent-bit-pubsub"><img src="https://codecov.io/gh/gjbae1212/fluent-bit-pubsub/branch/master/graph/badge.svg"/></a>        
 </p>
 
 This plugin is used to publish data to queue in google pubsub. 
