@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"testing"
@@ -81,7 +82,7 @@ func TestFLBPluginFlush(t *testing.T) {
 	wrapper = OutputWrapper(&testOutput{})
 	if os.Getenv("PROJECT_ID") == "" || os.Getenv("TOPIC_NAME") == "" ||
 		os.Getenv("JWT_PATH") == "" {
-			return
+		return
 	}
 	ok := FLBPluginFlush(nil, 0, nil)
 	assert.Equal(output.FLB_OK, ok)
@@ -102,4 +103,48 @@ func TestFLBPluginFlush(t *testing.T) {
 		})
 	}()
 	time.Sleep(5 * time.Second)
+}
+
+func TestInterfaceToBytes(t *testing.T) {
+	assert := assert.New(t)
+
+	now := time.Now()
+	tests := map[string]struct {
+		input  interface{}
+		output []byte
+	}{
+		"float": {
+			input:  float64(10.0),
+			output: []byte(fmt.Sprintf("%f", float64(10.0))),
+		},
+		"[]byte": {
+			input:  []byte(string("hello")),
+			output: []byte(string("hello")),
+		},
+		"int": {
+			input:  int(20),
+			output: []byte(string("20")),
+		},
+		"string": {
+			input:  "hello",
+			output: []byte(string("hello")),
+		},
+		"time": {
+			input:  now,
+			output: []byte(now.Format(time.RFC3339)),
+		},
+		"bool": {
+			input:  true,
+			output: []byte("true"),
+		},
+		"etc": {
+			input:  map[string]string{"hello": "world"},
+			output: []byte(fmt.Sprintf("%v", map[string]string{"hello": "world"})),
+		},
+	}
+
+	for _, t := range tests {
+		output := interfaceToBytes(t.input)
+		assert.Equal(t.output, output)
+	}
 }

@@ -161,8 +161,9 @@ func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
 		}
 		timestamp := ts.(output.FLBTime)
 		for k, v := range record {
-			fmt.Printf("[%s] %s %s %v \n", tagname, timestamp.String(), k, v)
-			results = append(results, plugin.Send(ctx, v.([]byte)))
+			//fmt.Printf("[%s] %s %s %v \n", tagname, timestamp.String(), k, v)
+			_, _, _ = k, timestamp, tagname
+			results = append(results, plugin.Send(ctx, interfaceToBytes(v)))
 		}
 	}
 	for _, result := range results {
@@ -183,6 +184,25 @@ func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
 func FLBPluginExit() int {
 	plugin.Stop()
 	return output.FLB_OK
+}
+
+func interfaceToBytes(v interface{}) []byte {
+	switch d := v.(type) {
+	case []byte:
+		return d
+	case string:
+		return []byte(d)
+	case int, int32, int64, uint, uint32, uint64:
+		return []byte(fmt.Sprintf("%d", d))
+	case float32, float64:
+		return []byte(fmt.Sprintf("%f", d))
+	case bool:
+		return []byte(strconv.FormatBool(d))
+	case time.Time:
+		return []byte(d.Format(time.RFC3339))
+	default:
+		return []byte(fmt.Sprintf("%v", d))
+	}
 }
 
 func main() {}
