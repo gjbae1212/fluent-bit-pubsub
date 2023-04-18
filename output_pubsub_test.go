@@ -97,7 +97,7 @@ func TestFLBPluginFlush(t *testing.T) {
 	assert.NoError(err)
 	sub := keeper.(*GooglePubSub).client.Subscription(topicName)
 	go func() {
-		sub.Receive(context.Background(), func(ctx context.Context, m *pubsub.Message) {
+		err = sub.Receive(context.Background(), func(ctx context.Context, m *pubsub.Message) {
 			log.Printf("Got message: %s", m.Data)
 			m.Ack()
 		})
