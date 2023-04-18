@@ -1,12 +1,6 @@
 # fluent-bit output plugin for google pubsub
 
-<p align="left">    
-  <a href="https://circleci.com/gh/gjbae1212/fluent-bit-pubsub/tree/master"><img src="https://circleci.com/gh/gjbae1212/fluent-bit-pubsub/tree/master.svg?style=svg"/></a>
-  <a href="https://hits.seeyoufarm.com"/><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fgjbae1212%2Ffluent-bit-pubsub"/></a>
-  <a href="/LICENSE"><img src="https://img.shields.io/badge/license-MIT-GREEN.svg" alt="license" /></a>
-  <a href="https://goreportcard.com/report/github.com/gjbae1212/fluent-bit-pubsub"><img src="https://goreportcard.com/badge/github.com/gjbae1212/fluent-bit-pubsub" alt="Go Report Card" /></a>
-  <a href="https://codecov.io/gh/gjbae1212/fluent-bit-pubsub"><img src="https://codecov.io/gh/gjbae1212/fluent-bit-pubsub/branch/master/graph/badge.svg"/></a>        
-</p>
+![example workflow](https://github.com/ragi256/fluent-bit-pubsub/actions/workflows/ci.yml/badge.svg?branch=master)
 
 This plugin is used to publish data to queue in google pubsub. 
 
