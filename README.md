@@ -15,13 +15,13 @@ If you should directly make binaries for mac, linux
 $ bash make.sh build
 
 # Your machine is mac, and if you should do to retry cross compiling for linux.
-# A command in below is required a docker.  
+# A command in below is required a docker.
 $ bash make.sh build_linux
 ```
 
 ## Usage
 ### configuration options for fluent-bit.conf
-| Key           | Description                                    | Default        |
+| Key             | Description                                    | Default        |
 | ----------------|------------------------------------------------|----------------|
 | Project         | google cloud project id | NONE(required) |
 | Topic           | google pubsub topic name | NONE(required) |
@@ -31,6 +31,8 @@ $ bash make.sh build_linux
 | DelayThreshold  | publish a non-empty batch after this delay has passed. (millsecond) | 1  |
 | ByteThreshold   | publish a batch when its size in bytes reaches this value. | 1000000 |
 | CountThreshold  | publish a batch when it has been reached count of messages. | 100  |
+| SchemaType      | topic schema type Avro ~~or Protocol Buffer~~. (Only support Avro yet) | NONE(optional) |
+| SchemaFilePath  | schema definition file path. | NONE(optional) |
 
 ### Example fluent-bit.conf
 ```conf
@@ -39,10 +41,10 @@ $ bash make.sh build_linux
     Match *
     Project your-project(custom)
     Topic your-topic-name(custom)
-    Jwtpath your-jwtpath(custom)    
+    Jwtpath your-jwtpath(custom)
 ```
 
 ### Example exec
 ```bash
-$ fluent-bit -c [your config file] -e pubsub.so 
+$ fluent-bit -c [your config file] -e pubsub.so
 ```

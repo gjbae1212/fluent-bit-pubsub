@@ -3,6 +3,7 @@ package main
 import (
 	"C"
 	"fmt"
+	"os"
 	"strconv"
 	"time"
 	"unsafe"
@@ -13,7 +14,6 @@ import (
 
 	"github.com/fluent/fluent-bit-go/output"
 )
-import "os"
 
 var (
 	plugin   Keeper
@@ -25,6 +25,9 @@ var (
 	countThreshold = pubsub.DefaultPublishSettings.CountThreshold
 	byteThreshold  = pubsub.DefaultPublishSettings.ByteThreshold
 	debug          = false
+
+	schemaType       pubsub.SchemaType
+	schemaDefinition string
 )
 
 type Output struct{}
@@ -68,6 +71,8 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 	bt := wrapper.GetConfigKey(ctx, "ByteThreshold")
 	ct := wrapper.GetConfigKey(ctx, "CountThreshold")
 	dt := wrapper.GetConfigKey(ctx, "DelayThreshold")
+	st := wrapper.GetConfigKey(ctx, "SchemaType")
+	sfp := wrapper.GetConfigKey(ctx, "SchemaFilePath")
 
 	fmt.Printf("[pubsub-go] plugin parameter project = '%s'\n", project)
 	fmt.Printf("[pubsub-go] plugin parameter topic = '%s'\n", topic)
@@ -77,6 +82,8 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 	fmt.Printf("[pubsub-go] plugin parameter byte threshold = '%s'\n", bt)
 	fmt.Printf("[pubsub-go] plugin parameter count threshold = '%s'\n", ct)
 	fmt.Printf("[pubsub-go] plugin parameter delay threshold = '%s'\n", dt)
+	fmt.Printf("[pubsub-go] plugin parameter schema type = '%s'\n", st)
+	fmt.Printf("[pubsub-go] plugin parameter schema definition file path = '%s'\n", sfp)
 
 	hostname, err = os.Hostname()
 	if err != nil {
@@ -125,14 +132,38 @@ func FLBPluginInit(ctx unsafe.Pointer) int {
 		}
 		delayThreshold = time.Duration(v) * time.Millisecond
 	}
+	if st != "" {
+		schemaType = pubsub.SchemaTypeUnspecified
+		if st == "Avro" {
+			schemaType = pubsub.SchemaAvro
+		} else if st == "ProtocolBuffer" {
+			schemaType = pubsub.SchemaProtocolBuffer
+		} else {
+			fmt.Printf("[err][init] Invalid SchemaType\n")
+			return output.FLB_ERROR
+		}
+	}
+	if sfp != "" {
+		definitionSource, err := os.ReadFile(sfp)
+		if err != nil {
+			fmt.Printf("[err][init] %+v\n", err)
+			return output.FLB_ERROR
+		}
+		schemaDefinition = string(definitionSource)
+	}
+
 	publishSetting := pubsub.PublishSettings{
 		ByteThreshold:  byteThreshold,
 		CountThreshold: countThreshold,
 		DelayThreshold: delayThreshold,
 		Timeout:        timeout,
 	}
+	schemaConfig := pubsub.SchemaConfig{
+		Type:       schemaType,
+		Definition: schemaDefinition,
+	}
 
-	keeper, err := NewKeeper(project, topic, jwtPath, &publishSetting)
+	keeper, err := NewKeeper(project, topic, jwtPath, &publishSetting, &schemaConfig)
 	if err != nil {
 		fmt.Printf("[err][init] %+v\n", err)
 		return output.FLB_ERROR
@@ -160,10 +191,19 @@ func FLBPluginFlush(data unsafe.Pointer, length C.int, tag *C.char) int {
 			break
 		}
 		timestamp := ts.(output.FLBTime)
-		for k, v := range record {
-			//fmt.Printf("[%s] %s %s %v \n", tagname, timestamp.String(), k, v)
-			_, _, _ = k, timestamp, tagname
-			results = append(results, plugin.Send(ctx, interfaceToBytes(v)))
+
+		if schemaType == pubsub.SchemaAvro || schemaType == pubsub.SchemaProtocolBuffer {
+			r, err := plugin.InterfaceMapToByte(record)
+			if err != nil {
+				fmt.Printf("[err][publish][don't retry] %+v \n", err)
+			}
+			results = append(results, plugin.Send(ctx, r))
+		} else {
+			for k, v := range record {
+				//fmt.Printf("[%s] %s %s %v \n", tagname, timestamp.String(), k, v)
+				_, _, _ = k, timestamp, tagname
+				results = append(results, plugin.Send(ctx, interfaceToBytes(v)))
+			}
 		}
 	}
 	for _, result := range results {

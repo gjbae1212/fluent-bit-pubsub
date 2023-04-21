@@ -93,7 +93,7 @@ func TestFLBPluginFlush(t *testing.T) {
 	if projectId == "" || topicName == "" || jwtPath == "" {
 		return
 	}
-	keeper, err := NewKeeper(projectId, topicName, jwtPath, nil)
+	keeper, err := NewKeeper(projectId, topicName, jwtPath, nil, nil)
 	assert.NoError(err)
 	sub := keeper.(*GooglePubSub).client.Subscription(topicName)
 	go func() {
