@@ -1,0 +1,103 @@
+{
+  "type": "record",
+  "name": "Avro",
+  "fields": [
+    {
+      "name": "BooleanField",
+      "type": "boolean"
+    },
+    {
+      "name": "IntField",
+      "type": "int"
+    },
+    {
+      "name": "LongField",
+      "type": "long"
+    },
+    {
+      "name": "FloatField",
+      "type": "float"
+    },
+    {
+      "name": "DoubleField",
+      "type": "double"
+    },
+    {
+      "name": "BytesField",
+      "type": "bytes"
+    },
+    {
+      "name": "StringField",
+      "type": "string"
+    },
+    {
+      "name": "RecordField",
+      "type": {
+        "type": "record",
+        "name": "myRecordType",
+        "fields" : [
+          {"name": "one",   "type": "int"   },
+          {"name": "two",   "type": "double"},
+          {"name": "three", "type": "string"}
+        ]
+      }
+    },
+    {
+      "name": "ArrayField",
+      "type": {
+        "type": "array",
+        "name": "myArrayType",
+        "items": "string"
+      }
+    },
+    {
+      "name": "MapField",
+      "type": {
+        "type": "map",
+        "name": "myMapType",
+        "values": "double"
+      }
+    },
+    {
+      "name": "NullUnionField",
+      "type": ["null", "string"]
+    },
+    {
+      "name": "FixedField",
+      "type": {
+        "type": "fixed",
+        "name": "myFixedType",
+        "size": 6
+      }
+    },
+    {
+      "name": "EnumField",
+      "type": {
+        "type": "enum",
+        "name": "myEnumType",
+        "symbols": ["one", "two", "three", "for", "five"]
+      }
+    },
+    {
+      "name": "TimestampField",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-micros"
+      }
+    },
+    {
+      "name": "DateField",
+      "type": {
+        "type": "int",
+        "logicalType": "date"
+      }
+    },
+    {
+      "name": "TimeField",
+      "type": {
+        "type": "long",
+        "logicalType": "time-micros"
+      }
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "type": "record",
+  "name": "Avro",
+  "fields": [
+    {
+      "name": "BooleanField",
+      "type": ["null", "boolean"],
+      "default": null
+    },
+    {
+      "name": "IntField",
+      "type": ["null", "int"],
+      "default": null
+    },
+    {
+      "name": "LongField",
+      "type": ["null", "long"],
+      "default": null
+    },
+    {
+      "name": "FloatField",
+      "type": ["null", "float"],
+      "default": null
+    },
+    {
+      "name": "DoubleField",
+      "type": ["null", "double"],
+      "default": null
+    },
+    {
+      "name": "BytesField",
+      "type": ["null", "bytes"],
+      "default": null
+    },
+    {
+      "name": "StringField",
+      "type": ["null", "string"],
+      "default": null
+    },
+    {
+      "name": "RecordField",
+      "type": ["null", {
+        "type": "record",
+        "name": "myRecordType",
+        "fields" : [
+          {"name": "one",   "type": "int"   },
+          {"name": "two",   "type": "double"},
+          {"name": "three", "type": "string"}
+        ]
+      }],
+      "default": null
+    },
+    {
+      "name": "ArrayField",
+      "type": ["null", {
+        "type": "array",
+        "name": "myArrayType",
+        "items": "string"
+      }],
+      "default": null
+    },
+    {
+      "name": "MapField",
+      "type": ["null", {
+        "type": "map",
+        "name": "myMapType",
+        "values": "double"
+      }],
+      "default": null
+    },
+    {
+      "name": "FixedField",
+      "type": ["null", {
+        "type": "fixed",
+        "name": "myFixedType",
+        "size": 6
+      }],
+      "default": null
+    },
+    {
+      "name": "EnumField",
+      "type": ["null", {
+        "type": "enum",
+        "name": "myEnumType",
+        "symbols": ["one", "two", "three", "for", "five"]
+      }],
+      "default": null
+    },
+    {
+      "name": "TimestampField",
+      "type": ["null", {
+        "type": "long",
+        "logicalType": "timestamp-micros"
+      }],
+      "default": null
+    },
+    {
+      "name": "DateField",
+      "type": ["null", {
+        "type": "int",
+        "logicalType": "date"
+      }],
+      "default": null
+    },
+    {
+      "name": "TimeField",
+      "type": ["null", {
+        "type": "long",
+        "logicalType": "time-micros"
+      }],
+      "default": null
+    }
+  ]
+}
