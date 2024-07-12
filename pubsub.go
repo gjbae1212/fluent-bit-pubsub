@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"cloud.google.com/go/pubsub"
 	"github.com/pkg/errors"
@@ -27,7 +27,7 @@ func NewKeeper(projectId, topicName, jwtPath string,
 		return nil, fmt.Errorf("[err] NewKeeper empty params")
 	}
 
-	keyBytes, err := ioutil.ReadFile(jwtPath)
+	keyBytes, err := os.ReadFile(jwtPath)
 	if err != nil {
 		return nil, errors.Wrap(err, "[err] jwt path")
 	}
